@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message AuthRequest
+{
+    int16 id = 1;
+}
+
+service SaveAuthUser
+{
+    rpc Save(AuthRequest) returns {};
+}

@@ -1,10 +1,15 @@
-from fastapi import FastAPI, Body
+from fastapi import Body, FastAPI
 import json
 import numpy as np
+from Lab2.AuthService.GrpServices.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
 
 app = FastAPI()
+
 BASE_URL = "/user"
-path_to_users = "../Users.json"
+path_to_users = "Users.json"
+
+Transaction_AddAuthUserService_Port = 50002
+Report_AddAuthUserService_Port = 50001
 
 @app.get(BASE_URL+"{id}")
 def get_user(id:str):
@@ -27,6 +32,8 @@ def authorization(login:str = Body(),
         user_password = users[id]["password"]
 
         if user_login == login and user_password == password:
+            RequestToAuthUserInAnotherService(int(id), Transaction_AddAuthUserService_Port)
+            RequestToAuthUserInAnotherService(int(id), Report_AddAuthUserService_Port)
             return {"status": 200, "id": id}
         
     return {"Message": "Неверный логин или пароль"}
@@ -58,4 +65,3 @@ def create_user(login:str = Body(),
     file.close()
 
     return {"status": 200, "id": id}
-

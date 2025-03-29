@@ -2,10 +2,15 @@ syntax = "proto3";
 
 message AuthRequest
 {
-    int16 id = 1;
+    int32 id = 1;
+}
+
+message Response
+{
+    bool status = 1;
 }
 
 service SaveAuthUser
 {
-    rpc Save(AuthRequest) returns {};
+    rpc Save(AuthRequest) returns (Response);
 }

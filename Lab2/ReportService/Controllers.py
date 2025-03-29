@@ -1,13 +1,14 @@
-from fastapi import FastAPI, Body, Query
+from fastapi import Body, FastAPI
+import uvicorn
 import json
-import numpy as np
 import datetime
-import re
+
+from Lab2.ReportService.CheckUserToAuth import check_user
 
 app = FastAPI()
 
 BASE_URL = "/report"
-path_tran = "../Transaction.json"
+path_tran = "Transaction.json"
 re_date_pattern = r"(0?[1-9]|[12]\d|3[01])/(0?[1-9]|1[012])/([12]\d{3}) ([01]\d|2[1-3]):([0-5]\d):([0-5]\d)"
 date_pattern = "%d/%m/%Y %H:%M:%S"
 
@@ -16,6 +17,9 @@ date_pattern = "%d/%m/%Y %H:%M:%S"
 def get_history_for_user(id:int,
                         begin: str = Body(pattern=re_date_pattern), 
                         end: str = Body(pattern=re_date_pattern)):
+    
+    if not check_user(id):
+        return {"Message": "Не авторизированный пользователь"}
 
     begin_date = datetime.datetime.strptime(begin, date_pattern)
     end_date = datetime.datetime.strptime(end, date_pattern)
@@ -43,3 +47,7 @@ def get_history_for_user(id:int,
     file_user_report.close()
 
     return {"status": 200}
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='127.0.0.1', port=81, reload=True)

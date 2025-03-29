@@ -1,15 +1,16 @@
-from fastapi import FastAPI, Body, Query
+from fastapi import Body, FastAPI
 import json
 import numpy as np
 import datetime
-import re
+
+from Lab2.TransactionService.CheckUserToAuth import check_user
 
 app = FastAPI()
 
 BASE_URL = "/trn"
-path_tran = "../Transaction.json"
-path_user = "../Users.json"
-path_idx_trn = "Idx_Transaction.txt"
+path_tran = "Transaction.json"
+path_user = "Users.json"
+path_idx_trn = "TransactionService/Idx_Transaction.txt"
 re_date_pattern = r"(0?[1-9]|[12]\d|3[01])/(0?[1-9]|1[012])/([12]\d{3}) ([01]\d|2[1-3]):([0-5]\d):([0-5]\d)"
 date_pattern = "%d/%m/%Y %H:%M:%S"
 
@@ -18,6 +19,9 @@ date_pattern = "%d/%m/%Y %H:%M:%S"
 def get_history_for_user(
                         begin: str = Body(pattern=re_date_pattern), 
                         end: str = Body(pattern=re_date_pattern)):
+    
+    if not check_user(id):
+        return {"Message": "Не авторизированный пользователь"}
     
     result = []
 

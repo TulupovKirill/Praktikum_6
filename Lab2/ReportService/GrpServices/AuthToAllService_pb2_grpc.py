@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import Lab2_pb2 as Lab2__pb2
+import AuthToAllService_pb2 as AuthToAllService__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -18,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in Lab2_pb2_grpc.py depends on'
+        + f' but the generated code in AuthToAllService_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class SayHelloStub(object):
+class SaveAuthUserStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,43 +34,43 @@ class SayHelloStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Recommed = channel.unary_unary(
-                '/SayHello/Recommed',
-                request_serializer=Lab2__pb2.HelloRequest.SerializeToString,
-                response_deserializer=Lab2__pb2.HelloResponse.FromString,
+        self.Save = channel.unary_unary(
+                '/SaveAuthUser/Save',
+                request_serializer=AuthToAllService__pb2.AuthRequest.SerializeToString,
+                response_deserializer=AuthToAllService__pb2.Response.FromString,
                 _registered_method=True)
 
 
-class SayHelloServicer(object):
+class SaveAuthUserServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Recommed(self, request, context):
+    def Save(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_SayHelloServicer_to_server(servicer, server):
+def add_SaveAuthUserServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Recommed': grpc.unary_unary_rpc_method_handler(
-                    servicer.Recommed,
-                    request_deserializer=Lab2__pb2.HelloRequest.FromString,
-                    response_serializer=Lab2__pb2.HelloResponse.SerializeToString,
+            'Save': grpc.unary_unary_rpc_method_handler(
+                    servicer.Save,
+                    request_deserializer=AuthToAllService__pb2.AuthRequest.FromString,
+                    response_serializer=AuthToAllService__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'SayHello', rpc_method_handlers)
+            'SaveAuthUser', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('SayHello', rpc_method_handlers)
+    server.add_registered_method_handlers('SaveAuthUser', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class SayHello(object):
+class SaveAuthUser(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Recommed(request,
+    def Save(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class SayHello(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/SayHello/Recommed',
-            Lab2__pb2.HelloRequest.SerializeToString,
-            Lab2__pb2.HelloResponse.FromString,
+            '/SaveAuthUser/Save',
+            AuthToAllService__pb2.AuthRequest.SerializeToString,
+            AuthToAllService__pb2.Response.FromString,
             options,
             channel_credentials,
             insecure,

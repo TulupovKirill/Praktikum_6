@@ -6,9 +6,9 @@ import grpc
 import RequestAboutNewUser_pb2
 import RequestAboutNewUser_pb2_grpc
 
-path_to_users_info = "../../UsersInfo.json"
+path_to_users_info = "../UsersInfo.json"
 
-class CreareNewUser(RequestAboutNewUser_pb2_grpc.SaveAuthUserServicer):
+class CreareNewUser(RequestAboutNewUser_pb2_grpc.CreateNewUserServicer):
     def Create(self, request, context):
         try:
             file = open(path_to_users_info)

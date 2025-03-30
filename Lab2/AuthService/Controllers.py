@@ -3,6 +3,7 @@ import json
 import numpy as np
 
 from Lab2.AuthService.GrpServices.AuthToAllService.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
+from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import RequestToAuthUserInAnotherService
 
 app = FastAPI()
 
@@ -11,7 +12,7 @@ path_to_users = "AuthService/Users.json"
 
 Transaction_AddAuthUserService_Port = 50002
 Report_AddAuthUserService_Port = 50001
-
+Report_CreateNewUser_Port = 50003
 
 @app.post(BASE_URL+"/auth")
 def authorization(login:str = Body(),
@@ -47,34 +48,31 @@ def create_user(login:str = Body(),
                 password:str = Body(),
                 name_user:str = Body()):
     
-    file = open(path_to_users)
+    file = open(path_to_users, 'r')
     users = json.load(file)
     file.close()
     
     idx = []
     for id in users:
-        idx.append(id)
+        if users[id]["login"] == login or users[id]["password"] == password:
+            return {"Message": "Логин или пароль уже занят"}
+        idx.append(int(id))
 
     while True:
-        id = np.random.randint(0, 1024)
+        id_user = np.random.randint(0, 1024)
         if id not in idx:
             break
     
     user = {"login": login,"password": password}
     
-    users[id] = user
+    users[id_user] = user
     file = open(path_to_users, "w")
     json.dump(users, file, indent=4)
     file.close()
 
-    # отправить сообщение в reportservice с новым пользователем
-    balance = 0
+    while True:
+        response = RequestToAuthUserInAnotherService(id_user, name_user, Report_CreateNewUser_Port)
+        if response.status:
+            break
 
-    data = {
-        "name": name_user,
-        "balance": balance
-    }
-
-
-
-    return {"status": 200, "id": id}
+    return {"status": 200, "id": id_user}

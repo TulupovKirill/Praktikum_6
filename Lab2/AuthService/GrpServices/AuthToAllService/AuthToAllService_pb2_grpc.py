@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import Lab2.AuthService.GrpServices.AuthToAllService_pb2 as AuthToAllService__pb2
+import Lab2.AuthService.GrpServices.AuthToAllService.AuthToAllService_pb2 as AuthToAllService__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__

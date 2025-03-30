@@ -1,0 +1,8 @@
+python -m grpc_tools.protoc -I protobufs \
+--python_out=AuthService/GrpServices/RequestAboutNewUser \
+--pyi_out=AuthService/GrpServices/RequestAboutNewUser \
+--grpc_python_out=AuthService/GrpServices/RequestAboutNewUser \
+--python_out=ReportService/GrpServices/RequestAboutNewUser \
+--pyi_out=ReportService/GrpServices/RequestAboutNewUser \
+--grpc_python_out=ReportService/GrpServices/RequestAboutNewUser \
+protobufs/RequestAboutNewUser.proto

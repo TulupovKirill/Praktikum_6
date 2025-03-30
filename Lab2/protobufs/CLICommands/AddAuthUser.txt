@@ -1,0 +1,15 @@
+python -m grpc_tools.protoc -I protobufs \
+
+--python_out=AuthService/GrpServices/AuthToAllService \
+--pyi_out=AuthService/GrpServices/AuthToAllService \
+--grpc_python_out=AuthService/GrpServices/AuthToAllService \
+
+--python_out=ReportService/GrpServices/AuthToAllService \
+--pyi_out=ReportService/GrpServices/AuthToAllService \
+--grpc_python_out=ReportService/GrpServices/AuthToAllService \
+
+--python_out=TransactionService/GrpServices/AuthToAllService \
+--pyi_out=TransactionService/GrpServices/AuthToAllService \
+--grpc_python_out=TransactionService/GrpServices/AuthToAllService \
+
+protobufs/AuthToAllService.proto

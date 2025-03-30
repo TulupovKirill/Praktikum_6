@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message InfoAboutNewUser
+{
+    int32 id = 1;
+    string name = 2;
+}
+
+message ReportResponce
+{
+    bool status = 1;
+}
+
+service CreateNewUser
+{
+    rpc Create(InfoAboutNewUser) returns (ReportResponce);
+}

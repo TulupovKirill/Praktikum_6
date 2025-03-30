@@ -1,22 +1,16 @@
 from fastapi import Body, FastAPI
 import json
 import numpy as np
-from Lab2.AuthService.GrpServices.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
+
+from Lab2.AuthService.GrpServices.AuthToAllService.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
 
 app = FastAPI()
 
 BASE_URL = "/user"
-path_to_users = "Users.json"
+path_to_users = "AuthService/Users.json" 
 
 Transaction_AddAuthUserService_Port = 50002
 Report_AddAuthUserService_Port = 50001
-
-@app.get(BASE_URL+"{id}")
-def get_user(id:str):
-    file = open(path_to_users)
-    users = json.load(file)
-    file.close()
-    return users[id]["info"]
 
 
 @app.post(BASE_URL+"/auth")
@@ -31,9 +25,18 @@ def authorization(login:str = Body(),
         user_login = users[id]["login"]
         user_password = users[id]["password"]
 
+        """
+            Если пользователь авторизован, то другие сервисы получают об этом информацию
+            Теперь этот пользователь может обращаться в другие сервисы
+            Цикл while - это упрощенный способ создать согласованность. 
+            Пока от сервисов не будет получен ответ об успешной обработки, сообщение будет повторно отправляться
+        """
         if user_login == login and user_password == password:
-            RequestToAuthUserInAnotherService(int(id), Transaction_AddAuthUserService_Port)
-            RequestToAuthUserInAnotherService(int(id), Report_AddAuthUserService_Port)
+            while True:
+                response1 = RequestToAuthUserInAnotherService(int(id), Transaction_AddAuthUserService_Port)
+                response2 = RequestToAuthUserInAnotherService(int(id), Report_AddAuthUserService_Port)
+                if response1 and response2:
+                    break
             return {"status": 200, "id": id}
         
     return {"Message": "Неверный логин или пароль"}
@@ -41,7 +44,8 @@ def authorization(login:str = Body(),
 
 @app.post(BASE_URL+"/create")
 def create_user(login:str = Body(),
-                    password:str = Body(), info:dict = Body()):
+                password:str = Body(),
+                name_user:str = Body()):
     
     file = open(path_to_users)
     users = json.load(file)
@@ -56,12 +60,21 @@ def create_user(login:str = Body(),
         if id not in idx:
             break
     
-    info["balance"] = 0
-    user = {"login": login,"password": password, "info": info}
+    user = {"login": login,"password": password}
     
     users[id] = user
     file = open(path_to_users, "w")
-    json.dump(users, file)
+    json.dump(users, file, indent=4)
     file.close()
+
+    # отправить сообщение в reportservice с новым пользователем
+    balance = 0
+
+    data = {
+        "name": name_user,
+        "balance": balance
+    }
+
+
 
     return {"status": 200, "id": id}

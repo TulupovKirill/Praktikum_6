@@ -3,7 +3,7 @@ import json
 import numpy as np
 
 from Lab2.AuthService.GrpServices.AuthToAllService.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
-from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import RequestToAuthUserInAnotherService
+from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import RequestToAddNewUser
 
 app = FastAPI()
 
@@ -71,7 +71,7 @@ def create_user(login:str = Body(),
     file.close()
 
     while True:
-        response = RequestToAuthUserInAnotherService(id_user, name_user, Report_CreateNewUser_Port)
+        response = RequestToAddNewUser(id_user, name_user, Report_CreateNewUser_Port)
         if response.status:
             break
 

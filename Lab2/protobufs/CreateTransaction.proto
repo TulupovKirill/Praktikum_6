@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+message RequestForTransaction
+{
+    string method = 1;
+    int32 id_user = 2;
+    int32 balance = 3;
+}
+
+message ResponseAboutTransaction
+{
+    bool status = 1;
+    string report = 2;
+}
+
+service CreateTransaction
+{
+    rpc Create(RequestForTransaction) returns (ResponseAboutTransaction);
+}

@@ -14,5 +14,13 @@
     "763": {
         "login": "login2",
         "password": "password2"
+    },
+    "947": {
+        "login": "dasha",
+        "password": "cool_password"
+    },
+    "796": {
+        "login": "Dog",
+        "password": "12345_password"
     }
 }

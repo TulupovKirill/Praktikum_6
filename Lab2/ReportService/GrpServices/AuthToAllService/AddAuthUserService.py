@@ -5,7 +5,7 @@ import grpc
 import AuthToAllService_pb2
 import AuthToAllService_pb2_grpc
 
-path_to_auth_user = "ReportService/auth_user.txt"
+path_to_auth_user = "Lab2/ReportService/auth_user.txt"
 
 class SaveAuthUser(AuthToAllService_pb2_grpc.SaveAuthUserServicer):
     def Save(self, request, context):

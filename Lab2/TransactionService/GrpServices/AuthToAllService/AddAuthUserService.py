@@ -5,12 +5,11 @@ import grpc
 import AuthToAllService_pb2
 import AuthToAllService_pb2_grpc
 
-path_to_auth_user = "TransactionService/auth_user.txt"
+path_to_auth_user = "Lab2/TransactionService/auth_user.txt"
 
 class Save(AuthToAllService_pb2_grpc.SaveAuthUserServicer):
     def Save(self, request, context):
         try:
-
             file = open(path_to_auth_user, "a+")
             file.write(f"{request.id} ")
             file.close()

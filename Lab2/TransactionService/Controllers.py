@@ -9,8 +9,7 @@ from Lab2.TransactionService.GrpServices.CreateTransaction.RequestCreateTransact
 app = FastAPI()
 
 BASE_URL = "/trn"
-path_tran = "TransactionService/Transaction.json"
-path_idx_trn = "TransactionService/Idx_Transaction.txt"
+path_tran = "Lab2/TransactionService/Transaction.json"
 re_date_pattern = r"(0?[1-9]|[12]\d|3[01])/(0?[1-9]|1[012])/([12]\d{3}) ([01]\d|2[1-3]):([0-5]\d):([0-5]\d)"
 date_pattern = "%d/%m/%Y %H:%M:%S"
 

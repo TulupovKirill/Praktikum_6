@@ -6,7 +6,7 @@ import grpc
 import CreateTransaction_pb2
 import CreateTransaction_pb2_grpc
 
-path_to_users_info = "ReportService/UsersInfo.json"
+path_to_users_info = "Lab2/ReportService/UsersInfo.json"
 methods = {"add": lambda x, y: x + y,
            "buy": lambda x, y: x - y}
 

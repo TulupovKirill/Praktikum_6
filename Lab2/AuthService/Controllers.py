@@ -8,7 +8,7 @@ from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import
 app = FastAPI()
 
 BASE_URL = "/user"
-path_to_users = "AuthService/Users.json" 
+path_to_users = "Lab2/AuthService/Users.json" 
 
 Transaction_AddAuthUserService_Port = 50002
 Report_AddAuthUserService_Port = 50001

@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from Lab2.AuthService.GrpServices.RequestAboutNewUser import RequestAboutNewUser_pb2 as RequestAboutNewUser__pb2
+import CreateTransaction_pb2 as CreateTransaction__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -18,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in RequestAboutNewUser_pb2_grpc.py depends on'
+        + f' but the generated code in CreateTransaction_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class CreateNewUserStub(object):
+class CreateTransactionStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -35,13 +35,13 @@ class CreateNewUserStub(object):
             channel: A grpc.Channel.
         """
         self.Create = channel.unary_unary(
-                '/CreateNewUser/Create',
-                request_serializer=RequestAboutNewUser__pb2.InfoAboutNewUser.SerializeToString,
-                response_deserializer=RequestAboutNewUser__pb2.ReportResponce.FromString,
+                '/CreateTransaction/Create',
+                request_serializer=CreateTransaction__pb2.RequestForTransaction.SerializeToString,
+                response_deserializer=CreateTransaction__pb2.ResponseAboutTransaction.FromString,
                 _registered_method=True)
 
 
-class CreateNewUserServicer(object):
+class CreateTransactionServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Create(self, request, context):
@@ -51,22 +51,22 @@ class CreateNewUserServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_CreateNewUserServicer_to_server(servicer, server):
+def add_CreateTransactionServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Create': grpc.unary_unary_rpc_method_handler(
                     servicer.Create,
-                    request_deserializer=RequestAboutNewUser__pb2.InfoAboutNewUser.FromString,
-                    response_serializer=RequestAboutNewUser__pb2.ReportResponce.SerializeToString,
+                    request_deserializer=CreateTransaction__pb2.RequestForTransaction.FromString,
+                    response_serializer=CreateTransaction__pb2.ResponseAboutTransaction.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'CreateNewUser', rpc_method_handlers)
+            'CreateTransaction', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('CreateNewUser', rpc_method_handlers)
+    server.add_registered_method_handlers('CreateTransaction', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class CreateNewUser(object):
+class CreateTransaction(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -83,9 +83,9 @@ class CreateNewUser(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/CreateNewUser/Create',
-            RequestAboutNewUser__pb2.InfoAboutNewUser.SerializeToString,
-            RequestAboutNewUser__pb2.ReportResponce.FromString,
+            '/CreateTransaction/Create',
+            CreateTransaction__pb2.RequestForTransaction.SerializeToString,
+            CreateTransaction__pb2.ResponseAboutTransaction.FromString,
             options,
             channel_credentials,
             insecure,

@@ -5,9 +5,9 @@ import grpc
 import AuthToAllService_pb2
 import AuthToAllService_pb2_grpc
 
-path_to_auth_user = "../auth_user.txt"
+path_to_auth_user = "ReportService/auth_user.txt"
 
-class Save(AuthToAllService_pb2_grpc.SaveAuthUserServicer):
+class SaveAuthUser(AuthToAllService_pb2_grpc.SaveAuthUserServicer):
     def Save(self, request, context):
         try:
 
@@ -22,7 +22,7 @@ class Save(AuthToAllService_pb2_grpc.SaveAuthUserServicer):
 def serve():
     port = "50001"
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
-    AuthToAllService_pb2_grpc.add_SaveAuthUserServicer_to_server(Save(), server)
+    AuthToAllService_pb2_grpc.add_SaveAuthUserServicer_to_server(SaveAuthUser(), server)
     server.add_insecure_port("[::]:" + port)
     server.start()
     print("Server started, listening on " + port)

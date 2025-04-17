@@ -1,5 +1,4 @@
 from fastapi import Body, FastAPI
-import uvicorn
 import json
 import datetime
 

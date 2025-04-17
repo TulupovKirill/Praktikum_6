@@ -1,0 +1,8 @@
+python -m grpc_tools.protoc -I protobufs \
+--python_out=ReportService/GrpServices/CreateTransaction \
+--pyi_out=ReportService/GrpServices/CreateTransaction \
+--grpc_python_out=ReportService/GrpServices/CreateTransaction \
+--python_out=TransactionService/GrpServices/CreateTransaction \
+--pyi_out=TransactionService/GrpServices/CreateTransaction \
+--grpc_python_out=TransactionService/GrpServices/CreateTransaction \
+protobufs/CreateTransaction.proto

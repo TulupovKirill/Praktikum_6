@@ -16,43 +16,12 @@ date_pattern = "%d/%m/%Y %H:%M:%S"
 
 Report_CreateTrancation_Port = 50004
 
-
-@app.post(BASE_URL+"/history")
-def get_history_for_user(
-                        begin: str = Body(pattern=re_date_pattern), 
-                        end: str = Body(pattern=re_date_pattern)):
-    
-    if not check_user(id):
-        return {"Message": "Не авторизированный пользователь"}
-    
-    result = []
-
-    begin_date = datetime.datetime.strptime(begin, date_pattern)
-    end_date = datetime.datetime.strptime(end, date_pattern)
-
-    file_with_trn = open(path_tran)
-    transaction = json.load(file_with_trn)
-    file_with_trn.close()
-
-    for id_trn in transaction:
-
-        str_date = transaction[id_trn]["date"]
-        date = datetime.datetime.strptime(str_date, date_pattern)
-
-        if begin_date < date < end_date:
-            result.append({id_trn:transaction[id_trn]})
-    
-    return result
-
-
 @app.post(BASE_URL+"/{method}")
 def add(id_user:int, method:str, balance:int = Body()):
 
     assert method in ["add", "buy"], {"Message": "Метод не поддерживается"}
 
-    check_user(id_user)
-
-    if not check_user:
+    if not check_user(id_user):
         return {"Message": "Пользователь не найден"}
     
     file_with_trn = open(path_tran)

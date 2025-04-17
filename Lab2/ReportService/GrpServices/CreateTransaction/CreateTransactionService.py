@@ -20,7 +20,7 @@ class CreareTransaction(CreateTransaction_pb2_grpc.CreateTransactionServicer):
             user_balance = users_info[str(request.id_user)]["balance"]
             result = methods[request.method](int(user_balance), request.balance)
 
-            if result > 0:
+            if result >= 0:
                 users_info[str(request.id_user)]["balance"] = result
                 status = True
                 report = "Транзакция произведена успешно"

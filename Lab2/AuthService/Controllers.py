@@ -52,15 +52,17 @@ def create_user(login:str = Body(),
     users = json.load(file)
     file.close()
     
+    # массив всех id пользователей
     idx = []
     for id in users:
         if users[id]["login"] == login or users[id]["password"] == password:
             return {"Message": "Логин или пароль уже занят"}
         idx.append(int(id))
 
+    # генерация нового id
     while True:
         id_user = np.random.randint(0, 1024)
-        if id not in idx:
+        if id_user not in idx:
             break
     
     user = {"login": login,"password": password}
@@ -70,7 +72,7 @@ def create_user(login:str = Body(),
     json.dump(users, file, indent=4)
     file.close()
 
-    while True:
+    while True: 
         response = RequestToAddNewUser(id_user, name_user, Report_CreateNewUser_Port)
         if response.status:
             break

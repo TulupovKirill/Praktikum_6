@@ -2,7 +2,7 @@ from fastapi import Body, FastAPI
 import json
 import datetime
 
-from Lab2.ReportService.CheckUserToAuth import check_user
+from Lab2.ReportService.CheckUserToAuth import check_valid_token
 
 app = FastAPI()
 
@@ -24,9 +24,10 @@ def get_user(id:str):
 @app.post(BASE_URL+"/history/{id}")
 def get_history_for_user(id:int,
                         begin: str = Body(pattern=re_date_pattern), 
-                        end: str = Body(pattern=re_date_pattern)):
+                        end: str = Body(pattern=re_date_pattern),
+                        token: str = Body()):
     
-    if not check_user(id):
+    if not check_valid_token(token):
         return {"Message": "Не авторизированный пользователь"}
 
     begin_date = datetime.datetime.strptime(begin, date_pattern)

@@ -1,10 +1,11 @@
 from fastapi import Body, FastAPI
 import json
 import numpy as np
+from datetime import datetime, timezone
 
 from Lab2.AuthService.GrpServices.AuthToAllService.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
 from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import RequestToAddNewUser
-from Lab2.AuthService.jwt_auth import create_token_for_auth_user, check_valid_token
+from Lab2.AuthService.jwt_auth import create_token_for_auth_user
 
 app = FastAPI()
 
@@ -48,7 +49,9 @@ def authorization(login:str = Body(),
             #         break
             # return {"status": 200, "id": id}
 
-            token = create_token_for_auth_user(payload={'id': id})
+            token = create_token_for_auth_user(payload={'id': id,
+                                                        "exp": datetime.now(tz=timezone.utc),
+                                                        "aud": "user"})
             return {"token": token}
         
     return {"Message": "Неверный логин или пароль"}
@@ -89,13 +92,3 @@ def create_user(login:str = Body(),
             break
 
     return {"status": 200, "id": id_user}
-
-
-@app.post(BASE_URL+"/check")
-def check(token: str = Body(),):
-
-    file = open(path_to_users, 'r')
-    users = json.load(file)
-    file.close()
-
-    return check_valid_token(token, users)

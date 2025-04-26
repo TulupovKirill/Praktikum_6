@@ -1,5 +1,13 @@
-path_to_auth_user = "Lab2/ReportService/auth_user.txt"
+import jwt
 
-def check_user(id):
-    auth_users = list(map(lambda data: int(data), open(path_to_auth_user).read().split(' ')[:-1]))
-    return id in auth_users
+key = open("Lab2/AuthService/secret.txt").read()
+
+def check_valid_token(token):
+    try:
+        # Проверяем валидность токена
+        jwt.decode(jwt=token, key=key, leeway=900, audience='user', algorithms='HS256')
+    except jwt.InvalidTokenError:
+        # В случае невалидности возвращаем сообщение
+        return False
+    
+    return True

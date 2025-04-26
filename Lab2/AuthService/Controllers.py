@@ -4,6 +4,7 @@ import numpy as np
 
 from Lab2.AuthService.GrpServices.AuthToAllService.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
 from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import RequestToAddNewUser
+from Lab2.AuthService.jwt_auth import create_token_for_auth_user, check_valid_token
 
 app = FastAPI()
 
@@ -33,12 +34,22 @@ def authorization(login:str = Body(),
             Пока от сервисов не будет получен ответ об успешной обработки, сообщение будет повторно отправляться
         """
         if user_login == login and user_password == password:
-            while True:
-                response1 = RequestToAuthUserInAnotherService(int(id), Transaction_AddAuthUserService_Port)
-                response2 = RequestToAuthUserInAnotherService(int(id), Report_AddAuthUserService_Port)
-                if response1 and response2:
-                    break
-            return {"status": 200, "id": id}
+
+            '''
+                Это из первой лабораторной, где 
+                информация об авторизированном пользователе рассылалась
+                в другие микросервисы
+            '''
+
+            # while True:
+            #     response1 = RequestToAuthUserInAnotherService(int(id), Transaction_AddAuthUserService_Port)
+            #     response2 = RequestToAuthUserInAnotherService(int(id), Report_AddAuthUserService_Port)
+            #     if response1 and response2:
+            #         break
+            # return {"status": 200, "id": id}
+
+            token = create_token_for_auth_user(payload={'id': id})
+            return {"token": token}
         
     return {"Message": "Неверный логин или пароль"}
 
@@ -78,3 +89,13 @@ def create_user(login:str = Body(),
             break
 
     return {"status": 200, "id": id_user}
+
+
+@app.post(BASE_URL+"/check")
+def check(token: str = Body(),):
+
+    file = open(path_to_users, 'r')
+    users = json.load(file)
+    file.close()
+
+    return check_valid_token(token, users)

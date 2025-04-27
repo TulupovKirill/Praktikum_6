@@ -3,10 +3,12 @@ import json
 import numpy as np
 import datetime
 
-from Lab2.TransactionService.CheckUserToAuth import check_valid_token
+from Lab2.TransactionService.auth_middleware import AuthMiddleware
 from Lab2.TransactionService.GrpServices.CreateTransaction.RequestCreateTransaction import RequestCreateTransaction
 
 app = FastAPI()
+
+app.add_middleware(AuthMiddleware)
 
 BASE_URL = "/trn"
 path_tran = "Lab2/TransactionService/Transaction.json"
@@ -19,9 +21,6 @@ Report_CreateTrancation_Port = 50004
 def add(id_user:int, method:str, balance:int, token: str = Body()):
 
     assert method in ["add", "buy"], {"Message": "Метод не поддерживается"}
-
-    if not check_valid_token(token):
-        return {"Message": "Пользователь не авторизован"}
     
     file_with_trn = open(path_tran)
     transactions = json.load(file_with_trn)

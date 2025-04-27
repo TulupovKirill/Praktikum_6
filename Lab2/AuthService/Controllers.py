@@ -52,7 +52,7 @@ def authorization(login:str = Body(),
             token = create_token_for_auth_user(payload={'id': id,
                                                         "exp": datetime.now(tz=timezone.utc),
                                                         "aud": "user"})
-            return {"token": token}
+            return {"id": id, "token": token}
         
     return {"Message": "Неверный логин или пароль"}
 

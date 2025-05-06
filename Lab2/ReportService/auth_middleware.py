@@ -13,13 +13,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
         else:
             return Response(status_code=403)
     
-    def check_valid_token(self, token):
+    def check_valid_token(self, token:str):
         key=open("Lab2/AuthService/secret.txt").read()
         try:
-            # Проверяем валидность токена
-            jwt.decode(jwt=token, key=key, leeway=900, audience='user', algorithms='HS256')
+            jwt.decode(jwt=token, key=key, leeway=900, audience='user', algorithms='HS256', verify=True)
+            return True
         except jwt.InvalidTokenError:
             # В случае невалидности возвращаем сообщение
             return False
-        
-        return True

@@ -1,18 +1,6 @@
 {
-    "1": {
+    "342": {
         "name": "user",
         "balance": 0
-    },
-    "763": {
-        "name": "user2",
-        "balance": 1000
-    },
-    "947": {
-        "name": "Dasha",
-        "balance": 500
-    },
-    "796": {
-        "name": "Dasha",
-        "balance": 300
     }
 }

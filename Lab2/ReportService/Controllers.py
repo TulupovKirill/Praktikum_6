@@ -15,16 +15,19 @@ re_date_pattern = r"(0?[1-9]|[12]\d|3[01])/(0?[1-9]|1[012])/([12]\d{3}) ([01]\d|
 date_pattern = "%d/%m/%Y %H:%M:%S"
 
 
-@app.get(BASE_URL+"{id}")
-def get_user(id:str, token: str = Body()):
+@app.post(BASE_URL)
+def get_user(id:str = Body(), token: str = Body()):
     file = open(path_to_users)
     users = json.load(file)
     file.close()
-    return users[id]
+    if id in users:
+        return users[id]
+    else:
+        return {"msg": "Пользователь не найден"}
 
 
 @app.post(BASE_URL+"/history{id}")
-def get_history_for_user(id:int,
+def get_history_for_user(id:str,
                         begin: str = Body(pattern=re_date_pattern), 
                         end: str = Body(pattern=re_date_pattern),
                         token: str = Body()):

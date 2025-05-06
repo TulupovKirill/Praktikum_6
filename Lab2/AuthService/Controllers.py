@@ -1,11 +1,12 @@
-from fastapi import Body, FastAPI
+from fastapi import Body, FastAPI, Response
 import json
 import numpy as np
 from datetime import datetime, timezone
 
-from Lab2.AuthService.GrpServices.AuthToAllService.RequestToAddAuthUserService import RequestToAuthUserInAnotherService
 from Lab2.AuthService.GrpServices.RequestAboutNewUser.RequestAboutNewUser import RequestToAddNewUser
-from Lab2.AuthService.jwt_auth import create_token_for_auth_user
+from Lab2.AuthService.jwt_auth import (check_access_token,
+                                       check_refresh_token,
+                                       create_token)
 
 app = FastAPI()
 
@@ -15,6 +16,33 @@ path_to_users = "Lab2/AuthService/Users.json"
 Transaction_AddAuthUserService_Port = 50002
 Report_AddAuthUserService_Port = 50001
 Report_CreateNewUser_Port = 50003
+
+
+@app.post(BASE_URL+'/refresh')
+def refresh(id: int = Body(),
+            access_token: str = Body(),
+            refresh_token: str = Body()):
+    
+    file = open(path_to_users)
+    users = json.load(file)
+    file.close()
+
+    # return Response(status_code=200)
+
+    user_refresh_token = users[str(id)]["token"]
+
+    if check_access_token(access_token) and check_refresh_token(user_refresh_token):
+        access_token = create_token(payload={'id': id, "exp": datetime.now(tz=timezone.utc), "aud": "user"})
+        refresh_token = create_token(payload={"id": id})
+
+        file = open(path_to_users, "w")
+        users[str(id)]['token'] = refresh_token
+        json.dump(users, file, indent=4)
+        file.close()
+
+        return {"access_token": access_token, "refresh_token": refresh_token}
+    else:
+        return Response("Необходима повторная авторизация", status_code=401)
 
 @app.post(BASE_URL+"/auth")
 def authorization(login:str = Body(),
@@ -35,24 +63,16 @@ def authorization(login:str = Body(),
             Пока от сервисов не будет получен ответ об успешной обработки, сообщение будет повторно отправляться
         """
         if user_login == login and user_password == password:
+            
+            access_token = create_token(payload={'id': id, "exp": datetime.now(tz=timezone.utc), "aud": "user"})
+            refresh_token = create_token(payload={"id": id, "exp": datetime.now(tz=timezone.utc), "aud": "user"})
 
-            '''
-                Это из первой лабораторной, где 
-                информация об авторизированном пользователе рассылалась
-                в другие микросервисы
-            '''
+            file = open(path_to_users, "w")
+            users[str(id)]['token'] = refresh_token
+            json.dump(users, file, indent=4)
+            file.close()
 
-            # while True:
-            #     response1 = RequestToAuthUserInAnotherService(int(id), Transaction_AddAuthUserService_Port)
-            #     response2 = RequestToAuthUserInAnotherService(int(id), Report_AddAuthUserService_Port)
-            #     if response1 and response2:
-            #         break
-            # return {"status": 200, "id": id}
-
-            token = create_token_for_auth_user(payload={'id': id,
-                                                        "exp": datetime.now(tz=timezone.utc),
-                                                        "aud": "user"})
-            return {"id": id, "token": token}
+            return {"id": id, "access_token": access_token, "refresh_token": refresh_token}
         
     return {"Message": "Неверный логин или пароль"}
 
@@ -79,7 +99,7 @@ def create_user(login:str = Body(),
         if id_user not in idx:
             break
     
-    user = {"login": login,"password": password}
+    user = {"login": login,"password": password, "token": ''}
     
     users[id_user] = user
     file = open(path_to_users, "w")
@@ -91,4 +111,4 @@ def create_user(login:str = Body(),
         if response.status:
             break
 
-    return {"status": 200, "id": id_user}
+    return {"status": 200}

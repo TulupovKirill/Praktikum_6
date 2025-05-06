@@ -5,4 +5,5 @@ scipy
 pandas
 statsmodels
 fastapi[standart]
-grpcio
+grpcio-tools~=1.30
+requests

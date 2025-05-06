@@ -1,26 +1,12 @@
 {
-    "1": {
-        "login": "login",
-        "password": "password"
-    },
-    "682": {
-        "login": "string",
-        "password": "string"
-    },
-    "263": {
-        "login": "login1",
-        "password": "password1"
-    },
-    "763": {
-        "login": "login2",
-        "password": "password2"
-    },
     "947": {
         "login": "dasha",
-        "password": "cool_password"
+        "password": "cool_password",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk0NyIsImV4cCI6MTc0NjUyMjcwOSwiYXVkIjoidXNlciJ9.AjKPHayq6ygR-NNtfuKI08OwOxkF_UuFd4r_GdsoMTo"
     },
-    "796": {
-        "login": "Dog",
-        "password": "12345_password"
+    "342": {
+        "login": "user",
+        "password": "password",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0MiIsImV4cCI6MTc0NjUyMjc2MywiYXVkIjoidXNlciJ9.nbhFuzoTqUanEvIEfPcOiox_Tlp58WRzGnhd4wXsztw"
     }
 }
